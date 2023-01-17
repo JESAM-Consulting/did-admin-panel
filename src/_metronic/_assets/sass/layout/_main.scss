@@ -1,0 +1,260 @@
+//
+// Base
+//
+// Body
+body {
+    background: $page-bg;
+}
+
+// Desktop Mode
+@include media-breakpoint-up(lg) {
+    // Wrapper
+    .wrapper {
+        // Fixed Header
+        .header-fixed & {
+            padding-top: get($header-config, desktop, fixed, height);
+        }
+        // Fixed Content Head
+        .header-fixed.subheader-fixed.subheader-enabled & {
+            padding-top: get($header-config, desktop, fixed, height) + get($subheader-config, fixed, height);
+        }
+        // Fixed Aside
+        .aside-fixed & {
+            padding-left: get($aside-config, base, width);
+        }
+        // Minimize Aside
+        .aside-fixed.aside-minimize:not(.aside-minimize-hover) & {
+            padding-left: get($aside-config, base, minimized-width);
+        }
+    }
+    // Container
+    .container,
+    .container-fluid {
+        padding: 0 get($page-padding, desktop);
+        max-width: 100% !important;
+    }
+}
+
+// Tablet & Mobile Modes
+@include media-breakpoint-down(md) {
+    // Wrapper
+    .wrapper {
+        // Fixed Header
+        .header-mobile-fixed & {
+            padding-top: get($header-config, tablet-and-mobile, fixed, height);
+        }
+        // Fixed Subheader
+        .header-mobile-fixed.subheader-mobile-fixed.subheader-enabled & {
+            padding-top: get($header-config, tablet-and-mobile, fixed, height) + get($subheader-config, fixed, height-mobile);
+        }
+    }
+    // Container
+    .container,
+    .container-fluid {
+        max-width: none;
+        padding: 0 get($page-padding, tablet-and-mobile);
+    }
+}
+
+.active-button-style {
+    padding: 3px 10px;
+    font-size: 12px;
+    font-weight: 500;
+    background-color: #f5f5f5;
+    border: none;
+    border-radius: 2px;
+    color: #323232;
+}
+
+.disactive-button-style {
+    padding: 3px 10px;
+    font-size: 12px;
+    font-weight: 500;
+    background-color: #de5e5e;
+    border: none;
+    border-radius: 2px;
+    color: #fff;
+}
+
+.cus-modal-box {
+    width: 870px;
+    background-color: #fff;
+    // padding: 30px;
+    box-shadow: 0px 0px 30px rgba(209, 217, 230, 0.5);
+    border-radius: 10px;
+    .cus-modal-body {
+        .text-grid {
+            display: grid;
+            padding: 0 30px;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px 20px;
+            justify-content: space-between;
+            .text-grid-items {
+                p {
+                    color: #193566;
+                    opacity: .5;
+                    font-size: 12px;
+                    line-height: 22px;
+                    margin: 0;
+                }
+                span {
+                    display: block;
+                    font-size: 14px;
+                    color: #323232;
+                }
+            }
+        }
+    }
+    .license-details,
+    .modal-bottom-align {
+        padding-top: 30px;
+    }
+    .cus-modal-header,
+    .license-details {
+        padding-bottom: 30px;
+        p {
+            margin: 0;
+            font-size: 22px;
+            padding: 0 30px;
+            color: #050505;
+            line-height: 30px;
+        }
+    }
+}
+
+.inventroy-data-text {
+    p {
+        margin: 0;
+        font-size: 22px;
+        color: #050505;
+        line-height: 30px;
+    }
+}
+
+.cus-modal-center-align {
+    display: flex;
+    justify-content: center;
+}
+
+.all-alignment-content {
+    padding: 0 5rem;
+}
+
+.sub-header-style {
+    padding: 30px 0 40px 0;
+    p {
+        margin: 0;
+        font-size: 22px;
+        padding: 0 30px;
+        color: #050505;
+        line-height: 30px;
+    }
+}
+
+.gallery-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+    padding: 0 30px;
+    justify-content: space-between;
+    .gallery-grid-items {
+        img {
+            width: 100%;
+            height: 180px;
+            object-fit: cover;
+        }
+    }
+}
+
+.MuiDialog-root {
+    z-index: 999 !important;
+}
+
+.honda-logo-center-alignment-page {
+    height: calc(100vh - 249px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    img {
+        width: 200px;
+    }
+}
+
+.honda-container {
+    max-width: 1280px;
+    padding: 0 20px;
+    margin: 0 auto;
+    .honda-text-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 20px 30px;
+    }
+    span {
+        font-size: 16px;
+        color: #757575;
+        display: block;
+        padding-bottom: 5px;
+    }
+    p {
+        font-size: 14px;
+        color: #323232;
+        margin-bottom: 0;
+        margin: 0;
+    }
+}
+
+.new-image-grid-align-for-modal {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 20px;
+    .new-image-grid-align-for-modal-items {
+        img {
+            width: 100%;
+            height: 220px;
+        }
+    }
+}
+
+.auth-login-banner-image {
+    background-image: url("https://i.ibb.co/c6j30WH/auth-banner.png");
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
+    width: 100%;
+    height: 100vh;
+}
+
+.auth-page-grid {
+    display: grid !important;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0;
+}
+
+input[type="search"] {
+    border-radius: 999px !important;
+}
+
+button {
+    border-radius: 999px !important;
+}
+
+.header {
+    background: #adaeaa !important;
+    height: 115px !important;
+}
+
+.auth-heder-logo {
+    width: 225px;
+}
+
+@media screen and (max-width: 580px) {
+    .auth-page-grid {
+        grid-template-columns: repeat(1 , 1fr);
+    }
+    .auth-heder-logo {
+        width: 180px;
+    }
+    .auth-login-banner-image {
+        height: auto;
+    }
+}
