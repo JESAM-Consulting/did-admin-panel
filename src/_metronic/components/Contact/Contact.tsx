@@ -54,7 +54,6 @@ const Contact = () => {
     )
       .then((res: any) => {
         setLoadingData(false);
-        console.log("ressss", res);
         setContactData(res?.data?.payload?.getContact);
         setCount(res?.data?.payload?.count);
       })
@@ -68,7 +67,6 @@ const Contact = () => {
   const deleteContact = async () => {
     await ApiDelete(`contact/remove-contact?limit=10&_id=${deleteId}`)
       .then((res: any) => {
-        console.log("ressss", res);
         setShow(false);
         getAllContact();
       })
@@ -167,7 +165,6 @@ const Contact = () => {
               <div
                 className="pl-3 cursor-pointer"
                 onClick={() => {
-                  console.log("Rowww", row);
                   setRowInfo(row);
                   setInfo(true);
                 }}

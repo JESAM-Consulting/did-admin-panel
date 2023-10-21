@@ -92,7 +92,6 @@ const PropertyManagement = () => {
     await ApiPut(`property/edit-property?_id=${idForChangeStatus}`, data)
       .then((res: any) => {
         setShow(false);
-        console.log("ressss", res);
         getPropertyBuilder();
         toast.success(res?.data?.messages);
       })
@@ -110,7 +109,6 @@ const PropertyManagement = () => {
       }`
     )
       .then((res: any) => {
-        console.log("getuser", res);
         setLoadingData(false);
         setPropertyBuilder(res?.data?.payload?.getContact);
         setCount(res?.data?.payload?.count);
@@ -123,7 +121,6 @@ const PropertyManagement = () => {
 
   const handleOnChange = (e: any) => {
     const { name, value } = e.target;
-    console.log("namemeeeee", name, value);
     setInputValue({ ...inputValue, [name]: value });
     setErrors({ ...errors, [name]: "" });
   };
@@ -142,7 +139,6 @@ const PropertyManagement = () => {
   function deleteFile(e: any) {
     const s = uploadFiles?.filter((item: any, index: any) => index !== e);
     setUploadImages(s);
-    console.log("sssssssssssssss", s);
   }
 
   const removeEditProduct = async (idForEdit: any, imgs: any) => {
@@ -153,7 +149,6 @@ const PropertyManagement = () => {
     formdata.append("propertyImage", imgs);
     await ApiPut(`property/remove-image?_id=${idForEdit}`, formdata)
       .then((res) => {
-        console.log("resssss", res);
         getimg(idForEdit);
       })
       .catch((err) => {
@@ -164,7 +159,6 @@ const PropertyManagement = () => {
   const getimg = async (id: any) => {
     await ApiGet(`property/get-property?_id=${id}`)
       .then((res: any) => {
-        console.log(">>>>>>>>>>>>>>>>>>>>>>>>>", res.data.payload);
         setAddedImg(res?.data?.payload?.getProperty[0]?.propertyImage);
         seteditimage(res?.data?.payload?.getProperty[0]?.propertyImage);
       })
@@ -176,8 +170,6 @@ const PropertyManagement = () => {
   const handleMenu = () => {
     setShowDelete(true);
   };
-
-  console.log("inputValuedasd", inputValue?.phone?.length);
 
   const validateforUserDataEdit = () => {
     let isFormValid: any = true;
@@ -354,13 +346,10 @@ const PropertyManagement = () => {
       // formData.append("x-auth-token", "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2Mzg5YzBlZDhlNTFlMTkyN2QwMWQ5MzIiLCJyb2xlIjoiYWRtaW4iLCJpYXQiOjE2Njk5ODI2MTN9.dFrLxTcLzVxZ9MUJWKmiQhoPyBH5uky57o_Z_YiUNxM");
       let fileArr = Array?.from(uploadFiles);
       fileArr.forEach((file) => {
-        console.log("@@@@@@@@@@@@");
         formData.append("propertyImage", file);
       });
       await ApiPost(`property/list-property`, formData)
         .then((res: any) => {
-          console.log("logsignup", res);
-
           setIsUser(false);
           toast.success(res?.data?.messages);
           setLoadingBtn(false);
@@ -381,13 +370,11 @@ const PropertyManagement = () => {
     const NewImages = new FormData();
     let fileArry = Array?.from(Images);
     fileArry.forEach((file: any) => {
-      console.log("@@@@@@@@@@@@");
       NewImages.append("propertyImage", file);
     });
 
     await ApiPut(`property/push-image?_id=${idForEditRealEstate}`, NewImages)
       .then((res: any) => {
-        console.log("addNewImage", res?.data?.payload?.propertyImage);
         setAddedImg(res?.data?.payload?.propertyImage);
       })
       .catch((err) => {
@@ -424,7 +411,6 @@ const PropertyManagement = () => {
       // let allImg=[...uploadFiles,...editImage]
       let fileArr = Array?.from(uploadFiles ? uploadFiles : editImage);
       fileArr.forEach((file) => {
-        console.log("@@@@@@@@@@@@");
         formData.append("propertyImage", file);
       });
       await ApiPut(
@@ -434,7 +420,6 @@ const PropertyManagement = () => {
         .then((res: any) => {
           if (res?.status === 200) {
             toast.success(res?.data?.messages);
-            console.log("editres", res);
             // getAllRealEstate();
             setIsRealstate(false);
             setInputValue({});
@@ -462,7 +447,6 @@ const PropertyManagement = () => {
     await ApiDelete(`contact/remove-contact?limit=10&_id=${deleteId}`)
       .then((res: any) => {
         if (res?.status === 200) {
-          console.log("ressss", res);
           setShow(false);
           getPropertyBuilder();
           setShowDelete(false);
@@ -479,7 +463,6 @@ const PropertyManagement = () => {
   };
 
   const handleSearch = (e: any) => {
-    console.log("firsteeeeeeeee", e.target.value);
     setSearchTerm(e.target.value);
   };
 
@@ -520,7 +503,6 @@ const PropertyManagement = () => {
     rowsPerPageText: "Zeilen pro Seite",
     rangeSeparatorText: "von",
   };
-  console.log("propertyBuilder", propertyBuilder);
   const columns = [
     {
       name: " Nr.",
@@ -601,7 +583,6 @@ const PropertyManagement = () => {
               <div
                 className="cursor-pointer"
                 onClick={() => {
-                  console.log("Rowww", row);
                   setRowInfo(row);
                   setInfo(true);
                 }}
@@ -1333,7 +1314,6 @@ const PropertyManagement = () => {
                                             aria-hidden="true"
                                             style={{ color: "#000" }}
                                             onClick={(e: any) => {
-                                              console.log("imgs", imgs);
                                               removeEditProduct(
                                                 idForEditRealEstate,
                                                 imgs
@@ -1350,7 +1330,6 @@ const PropertyManagement = () => {
                               <>
                                 {editImage?.length > 0 &&
                                   editImage?.map((imgs: any, index: any) => {
-                                    console.log("in else");
                                     return (
                                       <>
                                         <div className="position-relative">
@@ -1377,7 +1356,6 @@ const PropertyManagement = () => {
                                               style={{ color: "#000" }}
                                               aria-hidden="true"
                                               onClick={(e: any) => {
-                                                console.log("imgs", imgs);
                                                 removeEditProduct(
                                                   idForEditRealEstate,
                                                   imgs
