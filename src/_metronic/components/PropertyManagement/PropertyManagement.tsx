@@ -105,13 +105,14 @@ const PropertyManagement = () => {
   const getPropertyBuilder = async () => {
     setLoadingData(true);
     await ApiGet(
-      `property/get-property?limit=${countPerPage}&page=${page}&isAll=true&letter=${searchTerm ?? ""
+      `contact/get-contact?type=property&limit=${countPerPage}&page=${page}&isAll=true&letter=${
+        searchTerm ?? ""
       }`
     )
       .then((res: any) => {
         console.log("getuser", res);
         setLoadingData(false);
-        setPropertyBuilder(res?.data?.payload?.getProperty);
+        setPropertyBuilder(res?.data?.payload?.getContact);
         setCount(res?.data?.payload?.count);
       })
       .catch((err) => {
@@ -396,7 +397,6 @@ const PropertyManagement = () => {
   };
 
   const editRealEstate = async (e: any) => {
-
     if (validateforUserDataEdit()) {
       setLoadingBtn(true);
       let formData: any = new FormData();
@@ -439,7 +439,7 @@ const PropertyManagement = () => {
             setIsRealstate(false);
             setInputValue({});
             seteditimage([]);
-            setAddedImg([])
+            setAddedImg([]);
             setUploadImages([]);
             setIsUser(false);
             setIsEditApi(false);
@@ -458,8 +458,8 @@ const PropertyManagement = () => {
   };
 
   const deleteContact = async () => {
-    let data = {};
-    await ApiPut(`property/remove-property?_id=${deleteId}`, data)
+    // let data = {};
+    await ApiDelete(`contact/remove-contact?limit=10&_id=${deleteId}`)
       .then((res: any) => {
         if (res?.status === 200) {
           console.log("ressss", res);
@@ -517,11 +517,10 @@ const PropertyManagement = () => {
   };
 
   const paginationComponentOptions = {
-
-    rowsPerPageText: 'Zeilen pro Seite',
-    rangeSeparatorText: 'von',
-}
-
+    rowsPerPageText: "Zeilen pro Seite",
+    rangeSeparatorText: "von",
+  };
+  console.log("propertyBuilder", propertyBuilder);
   const columns = [
     {
       name: " Nr.",
@@ -531,29 +530,29 @@ const PropertyManagement = () => {
     },
     {
       name: "Datum",
-      selector: (row: any) =>
-        moment(row?.createdAt).format("DD/MM/YYYY") ?? "-",
+      selector: (row: any) => moment(row?.createdAt).format("DD/MM/YYYY"),
       sortable: true,
     },
     {
       name: "Name",
-      selector: (row: any) => row?.propertyName ?? "-",
-      sortable: true,
-    },
-    {
-      name: "Stadt",
-      selector: (row: any) => row?.city ?? "-",
+      selector: (row: any) => row?.firstName + " " + row?.lastName,
       sortable: true,
     },
 
     {
-      name: "Art der Immobilie",
-      selector: (row: any) => row?.houseType ?? "-",
+      name: "Status",
+      selector: (row: any) => row?.occupationRole,
       sortable: true,
     },
     {
+      name: "E-Mail",
+      selector: (row: any) => row?.email,
+      sortable: true,
+    },
+
+    {
       name: "Telefon",
-      selector: (row: any) => row?.contactNo ?? "-",
+      selector: (row: any) => row?.phone,
       sortable: true,
     },
     {
@@ -562,7 +561,7 @@ const PropertyManagement = () => {
         return (
           <>
             <div className="d-flex align-items-center" style={{ gap: "10px" }}>
-              <div
+              {/* <div
                 className="cursor-pointer"
                 onClick={() => {
                   setIsUser(true);
@@ -598,7 +597,7 @@ const PropertyManagement = () => {
                 <Tooltip title="Speichern" arrow>
                   <CreateIcon />
                 </Tooltip>
-              </div>
+              </div> */}
               <div
                 className="cursor-pointer"
                 onClick={() => {
@@ -618,10 +617,12 @@ const PropertyManagement = () => {
               >
                 <DeleteIcon />
               </div>
-              <div className="cus-medium-button-style button-height">
+              {/* <div className="cus-medium-button-style button-height">
                 <Tooltip
                   title={
-                    row?.isActive ? "Deaktivierte Kombination" : "Aktivierte Kombination"
+                    row?.isActive
+                      ? "Deaktivierte Kombination"
+                      : "Aktivierte Kombination"
                   }
                 >
                   <button
@@ -641,7 +642,7 @@ const PropertyManagement = () => {
                     {row.isActive ? "Aktivieren" : "Deaktivieren"}
                   </button>
                 </Tooltip>
-              </div>
+              </div> */}
             </div>
           </>
         );
@@ -669,7 +670,7 @@ const PropertyManagement = () => {
                 />
               </div>
             </div>
-            {userInfo?.role?.roleName === "admin" && (
+            {/* {userInfo?.role?.roleName === "admin" && (
               <div className="cus-medium-button-style button-height">
                 <button
                   className="btn btncolor mr-2"
@@ -678,7 +679,7 @@ const PropertyManagement = () => {
                   Hinzufügen
                 </button>
               </div>
-            )}
+            )} */}
           </div>
 
           {loadingData ? (
@@ -1347,46 +1348,47 @@ const PropertyManagement = () => {
                               </>
                             ) : (
                               <>
-                                {editImage?.length > 0 && editImage?.map((imgs: any, index: any) => {
-                                  console.log("in else");
-                                  return (
-                                    <>
-                                      <div className="position-relative">
-                                        <img
-                                          key={index}
-                                          src={imgs}
-                                          alt=""
-                                          style={{
-                                            width: "100px",
-                                            height: "100px",
-                                            borderRadius: "10px",
-                                            objectFit: "cover",
-                                          }}
-                                        />
-                                        <div
-                                          className="justify-content-center p-2 position-absolute"
-                                          style={{
-                                            right: "-10px",
-                                            top: "-13px",
-                                          }}
-                                        >
-                                          <i
-                                            className="fa-solid fa-circle-xmark"
-                                            style={{ color: "#000" }}
-                                            aria-hidden="true"
-                                            onClick={(e: any) => {
-                                              console.log("imgs", imgs);
-                                              removeEditProduct(
-                                                idForEditRealEstate,
-                                                imgs
-                                              );
+                                {editImage?.length > 0 &&
+                                  editImage?.map((imgs: any, index: any) => {
+                                    console.log("in else");
+                                    return (
+                                      <>
+                                        <div className="position-relative">
+                                          <img
+                                            key={index}
+                                            src={imgs}
+                                            alt=""
+                                            style={{
+                                              width: "100px",
+                                              height: "100px",
+                                              borderRadius: "10px",
+                                              objectFit: "cover",
                                             }}
-                                          ></i>
+                                          />
+                                          <div
+                                            className="justify-content-center p-2 position-absolute"
+                                            style={{
+                                              right: "-10px",
+                                              top: "-13px",
+                                            }}
+                                          >
+                                            <i
+                                              className="fa-solid fa-circle-xmark"
+                                              style={{ color: "#000" }}
+                                              aria-hidden="true"
+                                              onClick={(e: any) => {
+                                                console.log("imgs", imgs);
+                                                removeEditProduct(
+                                                  idForEditRealEstate,
+                                                  imgs
+                                                );
+                                              }}
+                                            ></i>
+                                          </div>
                                         </div>
-                                      </div>
-                                    </>
-                                  );
-                                })}
+                                      </>
+                                    );
+                                  })}
                               </>
                             )}
                           </div>
@@ -1476,9 +1478,7 @@ const PropertyManagement = () => {
                 <div className="d-flex align-items-center justify-content-center">
                   {loadingBtn ? (
                     <button className="btn btncolor mr-2">
-                      <span>
-                        {isEditApi ? "Speichern" : "Hinzufügen"}
-                      </span>
+                      <span>{isEditApi ? "Speichern" : "Hinzufügen"}</span>
                       {loadingBtn && (
                         <span className="mx-3 spinner spinner-white"></span>
                       )}
@@ -1490,11 +1490,7 @@ const PropertyManagement = () => {
                         isEditApi ? editRealEstate(e) : addRealEstate();
                       }}
                     >
-                      <span>
-                        {isEditApi
-                          ? "Speichern"
-                          : "Hinzufügen"}
-                      </span>
+                      <span>{isEditApi ? "Speichern" : "Hinzufügen"}</span>
                       {loadingBtn && (
                         <span className="mx-3 spinner spinner-white"></span>
                       )}
@@ -1511,7 +1507,7 @@ const PropertyManagement = () => {
           <Modal.Title className="text-danger">Alarm!</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          Wollen Sie das wirklich 
+          Wollen Sie das wirklich
           {displayModal === true ? " deaktivieren" : " aktivieren"}?
         </Modal.Body>
         <Modal.Footer>
@@ -1532,7 +1528,7 @@ const PropertyManagement = () => {
         <Modal.Header closeButton>
           <Modal.Title className="text-danger">Alarm!</Modal.Title>
         </Modal.Header>
-        <Modal.Body>Möchten Sie dieses Inserat entfernen?</Modal.Body>
+        <Modal.Body>Möchten Sie diesen Kontaktanfrage entfernen ?</Modal.Body>
         <Modal.Footer>
           <Button variant="secondary" onClick={handleClose}>
             Abbrechen
@@ -1561,38 +1557,29 @@ const PropertyManagement = () => {
               <>
                 <div className="ml-40">
                   <div className="form cus-container">
-                    {/* propertyName */}
+                    {/* Name */}
                     <div className="form-group row">
                       <label className="col-xl-3 col-lg-3 col-form-label">
-                        Name des Anwesens :
+                        Name :
                       </label>
                       <div className="col-lg-9 col-xl-6 pt-3">
                         <div>
-                          <span>{rowinfo?.propertyName ?? "-"}</span>
+                          <span>
+                            {rowinfo?.firstName + " " + rowinfo?.lastName ??
+                              "-"}
+                          </span>
                         </div>
                       </div>
                     </div>
 
-                    {/* propertyInterval */}
+                    {/* Email */}
                     <div className="form-group row">
                       <label className="col-xl-3 col-lg-3 col-form-label">
-                        Eigenschaft Intervall :
+                        E-Mail :
                       </label>
                       <div className="col-xl-3 col-lg-3 pt-3">
                         <div>
-                          <span>{rowinfo?.propertyInterval ?? "-"}</span>
-                        </div>
-                      </div>
-                    </div>
-
-                    {/* houseType */}
-                    <div className="form-group row">
-                      <label className="col-xl-3 col-lg-3 col-form-label">
-                        Haustyp :
-                      </label>
-                      <div className="col-xl-3 col-lg-3 pt-3">
-                        <div>
-                          <span>{rowinfo?.houseType ?? "-"}</span>
+                          <span>{rowinfo?.email ?? "-"}</span>
                         </div>
                       </div>
                     </div>
@@ -1604,12 +1591,84 @@ const PropertyManagement = () => {
                       </label>
                       <div className="col-xl-3 col-lg-3 pt-3">
                         <div>
+                          <span>{rowinfo?.phone ?? "-"}</span>
+                        </div>
+                      </div>
+                    </div>
+                    {/* postalCode */}
+                    <div className="form-group row">
+                      <label className="col-xl-3 col-lg-3 col-form-label">
+                        berufliche Rolle :
+                      </label>
+                      <div className="col-xl-3 col-lg-3 pt-3">
+                        <div>
+                          <span>{rowinfo?.occupationRole ?? "-"}</span>
+                        </div>
+                      </div>
+                    </div>
+                    {/* description */}
+                    <div className="form-group row">
+                      <label className="col-xl-3 col-lg-3 col-form-label">
+                        Bezeichnung :
+                      </label>
+                      <div className="col-xl-3 col-lg-3 pt-3">
+                        <div>
+                          <span>{rowinfo?.knowUs ?? "-"}</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </>
+            )}
+            {/* {info && (
+              <>
+                <div className="ml-40">
+                  <div className="form cus-container">
+                    <div className="form-group row">
+                      <label className="col-xl-3 col-lg-3 col-form-label">
+                        Name des Anwesens :
+                      </label>
+                      <div className="col-lg-9 col-xl-6 pt-3">
+                        <div>
+                          <span>{rowinfo?.propertyName ?? "-"}</span>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div className="form-group row">
+                      <label className="col-xl-3 col-lg-3 col-form-label">
+                        Eigenschaft Intervall :
+                      </label>
+                      <div className="col-xl-3 col-lg-3 pt-3">
+                        <div>
+                          <span>{rowinfo?.propertyInterval ?? "-"}</span>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div className="form-group row">
+                      <label className="col-xl-3 col-lg-3 col-form-label">
+                        Haustyp :
+                      </label>
+                      <div className="col-xl-3 col-lg-3 pt-3">
+                        <div>
+                          <span>{rowinfo?.houseType ?? "-"}</span>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div className="form-group row">
+                      <label className="col-xl-3 col-lg-3 col-form-label">
+                        Telefon :
+                      </label>
+                      <div className="col-xl-3 col-lg-3 pt-3">
+                        <div>
                           <span>{rowinfo?.contactNo ?? "-"}</span>
                         </div>
                       </div>
                     </div>
 
-                    {/* availableFrom */}
                     <div className="form-group row">
                       <label className="col-xl-3 col-lg-3 col-form-label">
                         Verfügbar ab :
@@ -1625,7 +1684,6 @@ const PropertyManagement = () => {
                       </div>
                     </div>
 
-                    {/* city */}
                     <div className="form-group row">
                       <label className="col-xl-3 col-lg-3 col-form-label">
                         Stadt :
@@ -1637,7 +1695,6 @@ const PropertyManagement = () => {
                       </div>
                     </div>
 
-                    {/* state */}
                     <div className="form-group row">
                       <label className="col-xl-3 col-lg-3 col-form-label">
                         Zustand :
@@ -1649,7 +1706,6 @@ const PropertyManagement = () => {
                       </div>
                     </div>
 
-                    {/* basementCount */}
                     <div className="form-group row">
                       <label className="col-xl-3 col-lg-3 col-form-label">
                         KellerCount :
@@ -1660,7 +1716,7 @@ const PropertyManagement = () => {
                         </div>
                       </div>
                     </div>
-                    {/* description */}
+
                     <div className="form-group row">
                       <label className="col-xl-3 col-lg-3 col-form-label">
                         Bezeichnung :
@@ -1671,7 +1727,7 @@ const PropertyManagement = () => {
                         </div>
                       </div>
                     </div>
-                    {/* livingSpaceSize */}
+
                     <div className="form-group row">
                       <label className="col-xl-3 col-lg-3 col-form-label">
                         Wohnfläche Größe :
@@ -1683,7 +1739,6 @@ const PropertyManagement = () => {
                       </div>
                     </div>
 
-                    {/* roomCount */}
                     <div className="form-group row">
                       <label className="col-xl-3 col-lg-3 col-form-label">
                         Zimmeranzahl :
@@ -1694,7 +1749,6 @@ const PropertyManagement = () => {
                         </div>
                       </div>
                     </div>
-                    {/* price */}
                     <div className="form-group row">
                       <label className="col-xl-3 col-lg-3 col-form-label">
                         Kaufpreis :
@@ -1706,7 +1760,6 @@ const PropertyManagement = () => {
                       </div>
                     </div>
 
-                    {/* isBalcony */}
                     <div className="form-group row">
                       <label className="col-xl-3 col-lg-3 col-form-label">
                         Gibt es Balkon/Terrasse? :
@@ -1720,7 +1773,6 @@ const PropertyManagement = () => {
                       </div>
                     </div>
 
-                    {/* isGueElevator */}
                     <div className="form-group row">
                       <label className="col-xl-3 col-lg-3 col-form-label">
                         Gibt es einen Personenaufzug? :
@@ -1734,7 +1786,6 @@ const PropertyManagement = () => {
                       </div>
                     </div>
 
-                    {/* isGueToilet */}
                     <div className="form-group row">
                       <label className="col-xl-3 col-lg-3 col-form-label">
                         Gibt es ein Gäste-WC? :
@@ -1748,7 +1799,6 @@ const PropertyManagement = () => {
                       </div>
                     </div>
 
-                    {/* isBasement */}
                     <div className="form-group row">
                       <label className="col-xl-3 col-lg-3 col-form-label">
                         Gibt es einen Keller/Keller? :
@@ -1762,7 +1812,6 @@ const PropertyManagement = () => {
                       </div>
                     </div>
 
-                    {/* isFurniture */}
                     <div className="form-group row">
                       <label className="col-xl-3 col-lg-3 col-form-label">
                         Gibt es Möbel? :
@@ -1775,7 +1824,7 @@ const PropertyManagement = () => {
                         </div>
                       </div>
                     </div>
-                    {/* Image */}
+                    
                     <div className="form-group row">
                       <label className="col-xl-3 col-lg-3 col-form-label">
                         Bild:
@@ -1795,7 +1844,7 @@ const PropertyManagement = () => {
                   </div>
                 </div>
               </>
-            )}
+            )} */}
           </List>
         </Dialog>
       ) : null}
