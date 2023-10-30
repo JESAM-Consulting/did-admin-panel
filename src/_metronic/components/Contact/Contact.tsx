@@ -38,7 +38,7 @@ const Contact = () => {
 
   const handleClose = () => {
     setShow(false);
-    setInfo(false);
+    setInfo(false)
   };
 
   const handleMenu = () => {
@@ -46,20 +46,20 @@ const Contact = () => {
   };
 
   const getAllContact = async () => {
-    setLoadingData(true);
+    setLoadingData(true)
     await ApiGet(
-      `contact/get-contact?type=kaufen|kontakt&limit=${countPerPage}&page=${page}&letter=${
-        searchTerm ?? ""
+      `contact/get-contact?limit=${countPerPage}&page=${page}&letter=${searchTerm ?? ""
       }`
     )
       .then((res: any) => {
-        setLoadingData(false);
+        setLoadingData(false)
+        console.log("ressss", res);
         setContactData(res?.data?.payload?.getContact);
         setCount(res?.data?.payload?.count);
       })
 
       .catch((err) => {
-        setLoadingData(false);
+        setLoadingData(false)
         console.log("errrr", err);
       });
   };
@@ -67,6 +67,7 @@ const Contact = () => {
   const deleteContact = async () => {
     await ApiDelete(`contact/remove-contact?limit=10&_id=${deleteId}`)
       .then((res: any) => {
+        console.log("ressss", res);
         setShow(false);
         getAllContact();
       })
@@ -109,9 +110,10 @@ const Contact = () => {
   };
 
   const paginationComponentOptions = {
-    rowsPerPageText: "Zeilen pro Seite",
-    rangeSeparatorText: "von",
-  };
+
+    rowsPerPageText: 'Zeilen pro Seite',
+    rangeSeparatorText: 'von',
+  }
 
   const columns = [
     {
@@ -165,6 +167,7 @@ const Contact = () => {
               <div
                 className="pl-3 cursor-pointer"
                 onClick={() => {
+                  console.log("Rowww", row);
                   setRowInfo(row);
                   setInfo(true);
                 }}
@@ -191,7 +194,7 @@ const Contact = () => {
               <div>
                 <input
                   type="text"
-                  style={{ borderRadius: "9999px" }}
+                  style={{ borderRadius: '9999px' }}
                   className={`form-control form-control-lg form-control-solid `}
                   name="search"
                   onChange={(e) => handleSearch(e)}
@@ -227,8 +230,7 @@ const Contact = () => {
               onChangeRowsPerPage={(rowPerPage) => {
                 setCountPerPage(rowPerPage);
               }}
-            />
-          )}
+            />)}
           <Modal show={show} onHide={handleClose}>
             <Modal.Header closeButton>
               <Modal.Title className="text-danger">Alarm!</Modal.Title>
@@ -259,8 +261,9 @@ const Contact = () => {
               <CloseIcon />
             </IconButton>
           </Toolbar>
-          <List>
-            {info && (
+          <List>{
+
+            info && (
               <>
                 <div className="ml-40">
                   <div className="form cus-container">
@@ -272,8 +275,7 @@ const Contact = () => {
                       <div className="col-lg-9 col-xl-6 pt-3">
                         <div>
                           <span>
-                            {rowinfo?.firstName + " " + rowinfo?.lastName ??
-                              "-"}
+                            {rowinfo?.firstName + " " + rowinfo?.lastName ?? "-"}
                           </span>
                         </div>
                       </div>
